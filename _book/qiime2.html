@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 QIIME2分析流程 | A Minimal Book Example</title>
+  <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 QIIME2分析流程 | A Minimal Book Example" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 QIIME2分析流程 | A Minimal Book Example" />
+  
+  <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  
+
+<meta name="author" content="Yihui Xie" />
+
+
+<meta name="date" content="2021-05-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
+<li class="chapter" data-level="2" data-path="qiime2.html"><a href="qiime2.html"><i class="fa fa-check"></i><b>2</b> QIIME2分析流程</a><ul>
+<li class="chapter" data-level="2.1" data-path="qiime2.html"><a href="qiime2.html#双端测序数据的分析流程"><i class="fa fa-check"></i><b>2.1</b> 双端测序数据的分析流程</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="qiime2.html"><a href="qiime2.html#qiime2的安装"><i class="fa fa-check"></i><b>2.1.1</b> QIIME2的安装</a></li>
+<li class="chapter" data-level="2.1.2" data-path="qiime2.html"><a href="qiime2.html#qiime2的数据格式"><i class="fa fa-check"></i><b>2.1.2</b> QIIME2的数据格式</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="qiime2.html"><a href="qiime2.html#数据分析实例"><i class="fa fa-check"></i><b>2.2</b> 数据分析实例</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="qiime2.html"><a href="qiime2.html#数据下载"><i class="fa fa-check"></i><b>2.2.1</b> 数据下载</a></li>
+<li class="chapter" data-level="2.2.2" data-path="qiime2.html"><a href="qiime2.html#导入数据"><i class="fa fa-check"></i><b>2.2.2</b> 导入数据</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Minimal Book Example</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="qiime2" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> QIIME2分析流程</h1>
+<p><a href="https://docs.qiime2.org/2021.4/about/">QIIME2</a>是目前分析16S最为常见的分析包，可以帮助分析者从原始DNA序列获取可供发表的图文结果。QIIME2具有一些特征:</p>
+<ul>
+<li>集成和自动跟踪的数据来源<br />
+</li>
+<li>语义系统<br />
+</li>
+<li>微生物功能分析插件<br />
+</li>
+<li>多种用户接口</li>
+</ul>
+<p>关于QIIME2的详细分析流程可见QIIME2的原始<a href="https://docs.qiime2.org/2021.4/">文档</a>,该文档链接为2021.4月的QIIME2官方文档。</p>
+<div id="双端测序数据的分析流程" class="section level2">
+<h2><span class="header-section-number">2.1</span> 双端测序数据的分析流程</h2>
+<p>QIIME2的分析流程可见下图：
+<img src="https://hugo-blog-1256988836.cos.ap-chengdu.myqcloud.com/16S/Micor-develop/ref7/QIIME2%E5%88%86%E6%9E%90%E6%B5%81%E7%A8%8B.png" /></p>
+<p>其中黄色框代表操作方法，绿色块代表文件或数据。</p>
+<ol style="list-style-type: decimal">
+<li>所有的宏基因组/扩增子测序的分析的起点是原始序列数据,原始数据多数为fastq格式，其包含有DNA序列数据和每个碱基的质量值<br />
+</li>
+<li>在样本来源未知时，需要使用barcode进行样本拆分（demultiplex），以便确定每条序列来自于哪个样本<br />
+</li>
+<li>序列去噪（denoised）以获得扩增子序列变异（amplicon sequence variants, ASVs）</li>
+</ol>
+<p>在序列去噪的过程中，会由于测序数据的质量较差，导致很多样本丢失。这个时候需要使用较为严格的数据预处理，但这也会相应的减少16S序列的长度，造成下游的物种分配难点。</p>
+<div id="qiime2的安装" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> QIIME2的安装</h3>
+<p>使用<code>conda</code>即可轻松安装QIIME2并激活,以安装2021.4版本为例：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="qiime2.html#cb2-1"></a><span class="fu">wget</span> https://data.qiime2.org/distro/core/qiime2-2021.4-py38-linux-conda.yml</span>
+<span id="cb2-2"><a href="qiime2.html#cb2-2"></a><span class="ex">conda</span> env create -n qiime2-2021.4 --file qiime2-2021.4-py38-linux-conda.yml</span>
+<span id="cb2-3"><a href="qiime2.html#cb2-3"></a><span class="co"># OPTIONAL CLEANUP</span></span>
+<span id="cb2-4"><a href="qiime2.html#cb2-4"></a><span class="fu">rm</span> qiime2-2021.4-py38-linux-conda.yml</span>
+<span id="cb2-5"><a href="qiime2.html#cb2-5"></a><span class="co">## 激活环境</span></span>
+<span id="cb2-6"><a href="qiime2.html#cb2-6"></a><span class="ex">conda</span> activate qiime2-2021.4</span>
+<span id="cb2-7"><a href="qiime2.html#cb2-7"></a><span class="co">## 检测安装</span></span>
+<span id="cb2-8"><a href="qiime2.html#cb2-8"></a><span class="ex">qiime</span> --help</span></code></pre></div>
+</div>
+<div id="qiime2的数据格式" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> QIIME2的数据格式</h3>
+<p>QIIME2主要以两种输出为主，后缀分别为<code>qza</code>和<code>qzv</code>，我们分别讲述这两类文件:
+<strong>qza</strong>：QIIME 2 artifacts，qza文件包含文件数据和元数据（metadata），分析过程中的各类数据都被打包为qza文件格式，实际上，qza文件格式是<code>zip</code>文件格式的另一种说法，将文件的后缀从<code>qza</code>修改为<code>zip</code>即可以对文件进行解压操作并提取出文件内的原始内容。</p>
+<p><strong>qzv</strong>:visualizations。qiime2的各类可视化文件均以qzv文件格式保留，将qzv文件拖入网站<a href="https://view.qiime2.org/">QIIME2 VIEW</a>即可查看。</p>
+</div>
+</div>
+<div id="数据分析实例" class="section level2">
+<h2><span class="header-section-number">2.2</span> 数据分析实例</h2>
+<p>以文章<strong>Persistent Gut Microbiota Immaturity in Malnourished Bangladeshi Children</strong>为例，介绍分析流程。</p>
+<div id="数据下载" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> 数据下载</h3>
+<p>从ENA获取Accession Number为<code>PRJEB5482</code>的序列下载信息，数据下载完成后，在数据目录下运行命令:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="qiime2.html#cb3-1"></a><span class="ex">seqkit</span> stat -j 40 ./*</span></code></pre></div>
+<p>其中，<code>-j</code>参数为指定运行的线程数目，该命令会统计每个序列文件的基础信息包括有序列数目，bp个数等，若某个文件下载不完整出现序列片段的缺失，则命令会对该文件进行报错。</p>
+</div>
+<div id="导入数据" class="section level3">
+<h3><span class="header-section-number">2.2.2</span> 导入数据</h3>
+<p>首先创建文件<code>pe-33-manifest.txt</code>，该文件应当包含样本的基础id和fastq序列的绝对路径，示例如下：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="qiime2.html#cb4-1"></a><span class="ex">sample-id</span>       forward-absolute-filepath       reverse-absolute-filepath</span>
+<span id="cb4-2"><a href="qiime2.html#cb4-2"></a><span class="ex">1</span>       /home/jfh/Storage3/Micro-Develop/ref_7/fastq/Bgmal10.s10_R1.fastq.gz    /home/jfh/Storage3/Micro-Develop/ref_7/fastq/Bgmal10.s10_R2.fastq.gz</span>
+<span id="cb4-3"><a href="qiime2.html#cb4-3"></a><span class="ex">2</span>       /home/jfh/Storage3/Micro-Develop/ref_7/fastq/Bgmal10.s11_R1.fastq.gz    /home/jfh/Storage3/Micro-Develop/ref_7/fastq/Bgmal10.s11_R2.fastq.gz</span></code></pre></div>
+<p>另一个文件则为<code>metadata</code>文件，该文件构成样本id和文件属性的对应:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="qiime2.html#cb5-1"></a><span class="ex">sample-id</span>       sample-name     group</span>
+<span id="cb5-2"><a href="qiime2.html#cb5-2"></a><span class="co">#q2:types       categorical     categorical</span></span>
+<span id="cb5-3"><a href="qiime2.html#cb5-3"></a><span class="ex">1</span>       Bgmal10.s10     course_of_the_SAM_trial</span>
+<span id="cb5-4"><a href="qiime2.html#cb5-4"></a><span class="ex">2</span>       Bgmal10.s11     course_of_the_SAM_trial</span>
+<span id="cb5-5"><a href="qiime2.html#cb5-5"></a><span class="ex">3</span>       Bgmal10.s12     course_of_the_SAM_trial</span>
+<span id="cb5-6"><a href="qiime2.html#cb5-6"></a><span class="ex">4</span>       Bgmal10.s13     course_of_the_SAM_trial</span>
+<span id="cb5-7"><a href="qiime2.html#cb5-7"></a><span class="ex">5</span>       Bgmal10.s1      course_of_the_SAM_trial</span>
+<span id="cb5-8"><a href="qiime2.html#cb5-8"></a><span class="ex">6</span>       Bgmal10.s3      course_of_the_SAM_trial</span></code></pre></div>
+<ul>
+<li>将数据导入到qza文件中</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="qiime2.html#cb6-1"></a><span class="ex">qiime</span> tools import --type <span class="st">&#39;SampleData[PairedEndSequencesWithQuality]&#39;</span> \</span>
+<span id="cb6-2"><a href="qiime2.html#cb6-2"></a>--input-path pe-33-manifest.txt --output-path pe_sequence.qza \</span>
+<span id="cb6-3"><a href="qiime2.html#cb6-3"></a>--input-format PairedEndFastqManifestPhred33V2</span>
+<span id="cb6-4"><a href="qiime2.html#cb6-4"></a></span>
+<span id="cb6-5"><a href="qiime2.html#cb6-5"></a><span class="co">## 获得可视化的质量图形</span></span>
+<span id="cb6-6"><a href="qiime2.html#cb6-6"></a><span class="ex">qiime</span> demux summarize --i-data pe_sequence.qza  \</span>
+<span id="cb6-7"><a href="qiime2.html#cb6-7"></a>--o-visualization pe_sequence.qzv</span></code></pre></div>
+<p>将生成的<code>pe_sequence.qzv</code>导入到<a href="https://view.qiime2.org/">qiime2view</a>中进行查看。可以看到如下结果：
+<img src="https://hugo-blog-1256988836.cos.ap-chengdu.myqcloud.com/16S/%E5%AD%9F%E5%8A%A0%E6%8B%89%E5%9B%BD%E6%95%B0%E6%8D%AE%E8%B4%A8%E9%87%8F.png" /></p>
+<p>从图中可以看到，reverse数据的质量很差，在140bp时就出现了数据质量的大幅度下降。</p>
+<p>下面为数据基本统计：</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Minimum:</th>
+<th align="left">2545</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Median:</td>
+<td align="left">21910.0</td>
+</tr>
+<tr class="even">
+<td align="left">Mean:</td>
+<td align="left">31070.940995382247</td>
+</tr>
+<tr class="odd">
+<td align="left">Maximum:</td>
+<td align="left">887651</td>
+</tr>
+<tr class="even">
+<td align="left">Total:</td>
+<td align="left">60557264</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>数据质控</li>
+</ul>
+<blockquote>
+<p>dada2去噪会由于样本测序质量较差而丢失样本，在本研究中尤甚，故重新选择了deblur去噪，但该去噪方案速度极慢,但是需要注意的是，在大部分的分析中，以DADA2去噪为主流方案。关于DADA2的去噪方法请查看官网moving tutorial教程</p>
+</blockquote>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="qiime2.html#cb7-1"></a><span class="ex">qiime</span> quality-filter q-score \</span>
+<span id="cb7-2"><a href="qiime2.html#cb7-2"></a> --i-demux pe_sequence.qza \</span>
+<span id="cb7-3"><a href="qiime2.html#cb7-3"></a> --o-filtered-sequences demux-filtered.qza \</span>
+<span id="cb7-4"><a href="qiime2.html#cb7-4"></a> --o-filter-stats demux-filter-stats.qza</span>
+<span id="cb7-5"><a href="qiime2.html#cb7-5"></a></span>
+<span id="cb7-6"><a href="qiime2.html#cb7-6"></a><span class="co">## 只保留120bp的片段</span></span>
+<span id="cb7-7"><a href="qiime2.html#cb7-7"></a><span class="ex">qiime</span> deblur denoise-16S \</span>
+<span id="cb7-8"><a href="qiime2.html#cb7-8"></a>  --i-demultiplexed-seqs demux-filtered.qza \</span>
+<span id="cb7-9"><a href="qiime2.html#cb7-9"></a>  --p-trim-length 120 \</span>
+<span id="cb7-10"><a href="qiime2.html#cb7-10"></a>  --o-representative-sequences rep-seqs-deblur.qza \</span>
+<span id="cb7-11"><a href="qiime2.html#cb7-11"></a>  --o-table table-deblur.qza \</span>
+<span id="cb7-12"><a href="qiime2.html#cb7-12"></a>  --p-sample-stats \</span>
+<span id="cb7-13"><a href="qiime2.html#cb7-13"></a>  --o-stats deblur-stats.qza</span>
+<span id="cb7-14"><a href="qiime2.html#cb7-14"></a></span>
+<span id="cb7-15"><a href="qiime2.html#cb7-15"></a><span class="co">#生成ASV table</span></span>
+<span id="cb7-16"><a href="qiime2.html#cb7-16"></a><span class="ex">qiime</span> feature-table summarize --i-table table-deblur.qza --o-visualization table-deblur.qzv</span>
+<span id="cb7-17"><a href="qiime2.html#cb7-17"></a></span>
+<span id="cb7-18"><a href="qiime2.html#cb7-18"></a><span class="fu">mv</span> table-deblur.qza table.qza <span class="kw">;</span><span class="fu">mv</span> rep-seqs-deblur.qza rep-seqs.qza</span></code></pre></div>
+<ul>
+<li>多序列比对和构建进化树</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="qiime2.html#cb8-1"></a><span class="co">#可视化feature</span></span>
+<span id="cb8-2"><a href="qiime2.html#cb8-2"></a><span class="ex">qiime</span> feature-table summarize --i-table table.qza --o-visualization table.qzv</span>
+<span id="cb8-3"><a href="qiime2.html#cb8-3"></a><span class="co">## 构建进化树</span></span>
+<span id="cb8-4"><a href="qiime2.html#cb8-4"></a><span class="ex">qiime</span> phylogeny align-to-tree-mafft-fasttree \</span>
+<span id="cb8-5"><a href="qiime2.html#cb8-5"></a>  --i-sequences rep-seqs.qza \</span>
+<span id="cb8-6"><a href="qiime2.html#cb8-6"></a>  --o-alignment aligned-rep-seqs.qza \</span>
+<span id="cb8-7"><a href="qiime2.html#cb8-7"></a>  --o-masked-alignment masked-aligned-rep-seqs.qza \</span>
+<span id="cb8-8"><a href="qiime2.html#cb8-8"></a>  --o-tree unrooted-tree.qza \</span>
+<span id="cb8-9"><a href="qiime2.html#cb8-9"></a>  --o-rooted-tree rooted-tree.qza</span></code></pre></div>
+<p>从上述文件<code>Healthy-filtered-table.qzv</code>观测样本的特征，<code>Feature Count</code>最小为2324，为了保证复现，我们在稀释的时候应当保证每一个样本都能够保留。故按照 2324的标准进行稀释。</p>
+<ul>
+<li>查看稀释曲线</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="qiime2.html#cb9-1"></a><span class="ex">qiime</span> diversity alpha-rarefaction \</span>
+<span id="cb9-2"><a href="qiime2.html#cb9-2"></a>  --i-table table.qza \</span>
+<span id="cb9-3"><a href="qiime2.html#cb9-3"></a>  --i-phylogeny rooted-tree.qza \</span>
+<span id="cb9-4"><a href="qiime2.html#cb9-4"></a>  --p-max-depth 2324 \</span>
+<span id="cb9-5"><a href="qiime2.html#cb9-5"></a>  --m-metadata-file metadata.txt \</span>
+<span id="cb9-6"><a href="qiime2.html#cb9-6"></a>  --o-visualization alpha-rarefaction.qzv</span></code></pre></div>
+<p>将文件<code>alpha-rarefaction.qzv</code>在QIIME2 VIEW中查看，大部分样本在2324时ASV数目基本趋于饱和。</p>
+<ul>
+<li>稀释样本</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="qiime2.html#cb10-1"></a><span class="ex">qiime</span> diversity core-metrics-phylogenetic \</span>
+<span id="cb10-2"><a href="qiime2.html#cb10-2"></a>  --i-phylogeny rooted-tree.qza \</span>
+<span id="cb10-3"><a href="qiime2.html#cb10-3"></a>  --i-table Healthy-filtered-table.qza  \</span>
+<span id="cb10-4"><a href="qiime2.html#cb10-4"></a>  --p-sampling-depth 2324 \</span>
+<span id="cb10-5"><a href="qiime2.html#cb10-5"></a>  --m-metadata-file metadata.txt \</span>
+<span id="cb10-6"><a href="qiime2.html#cb10-6"></a>  --output-dir core-metrics</span></code></pre></div>
+<ul>
+<li>物种分类</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="qiime2.html#cb11-1"></a><span class="ex">qiime</span> feature-classifier classify-sklearn \</span>
+<span id="cb11-2"><a href="qiime2.html#cb11-2"></a>    --i-classifier gg-13-8-99-nb-classifier.qza \</span>
+<span id="cb11-3"><a href="qiime2.html#cb11-3"></a>    --i-reads rep-seqs.qza \</span>
+<span id="cb11-4"><a href="qiime2.html#cb11-4"></a>    --o-classification taxonomy.qza</span>
+<span id="cb11-5"><a href="qiime2.html#cb11-5"></a> <span class="ex">qiime</span> metadata tabulate \</span>
+<span id="cb11-6"><a href="qiime2.html#cb11-6"></a>    --m-input-file taxonomy.qza \</span>
+<span id="cb11-7"><a href="qiime2.html#cb11-7"></a>    --o-visualization taxonomy.qzv</span>
+<span id="cb11-8"><a href="qiime2.html#cb11-8"></a> <span class="ex">qiime</span> taxa barplot \</span>
+<span id="cb11-9"><a href="qiime2.html#cb11-9"></a>  --i-table core-metrics/rarefied_table.qza \</span>
+<span id="cb11-10"><a href="qiime2.html#cb11-10"></a>  --i-taxonomy taxonomy.qza \</span>
+<span id="cb11-11"><a href="qiime2.html#cb11-11"></a>  --m-metadata-file metadata.txt \</span>
+<span id="cb11-12"><a href="qiime2.html#cb11-12"></a>  --o-visualization rarefied_taxa-bar-plots.qzv </span></code></pre></div>
+<p>不同水平的物种丰度结果可以直接从<code>rarefied_taxa-bar-plots.qzv</code>中获取，而每一个ASV的丰度则位于文件<code>rarefied_table.qza</code>中，我们可以将该文件解压，获取其中<code>data</code>目录下的<code>biom</code>文件</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="qiime2.html#cb12-1"></a><span class="fu">mkdir</span> -p ASV<span class="kw">;</span> <span class="bu">cd</span> ASV</span>
+<span id="cb12-2"><a href="qiime2.html#cb12-2"></a><span class="fu">cp</span> ../core-metrics/rarefied_table.qza rarefied_table.zip</span>
+<span id="cb12-3"><a href="qiime2.html#cb12-3"></a><span class="fu">unzip</span> rarefied_table.zip<span class="kw">;</span>  <span class="co"># 需要对解压下的文件夹重命名，比如命名为rarefied_table</span></span>
+<span id="cb12-4"><a href="qiime2.html#cb12-4"></a><span class="bu">cd</span> rarefied_table/data<span class="kw">;</span></span>
+<span id="cb12-5"><a href="qiime2.html#cb12-5"></a><span class="ex">biom</span> convert -i feature-table.biom -o asv_table.txt --to-tsv</span></code></pre></div>
+<p>这样便可以获取每一个ASV的丰度了。</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Micorbiota_Development.pdf", "Micorbiota_Development.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
