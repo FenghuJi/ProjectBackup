@@ -1,8 +1,0 @@
-prerequisites
-qiime2
-双端测序数据的分析流程
-qiime2的安装
-qiime2的数据格式
-数据分析实例
-数据下载
-导入数据
