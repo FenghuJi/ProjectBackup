@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 随机森林模型 | 项目分析流程</title>
+  <meta name="description" content="毕业季关于幼儿微生物发展的文档记载" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 随机森林模型 | 项目分析流程" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="毕业季关于幼儿微生物发展的文档记载" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 随机森林模型 | 项目分析流程" />
+  
+  <meta name="twitter:description" content="毕业季关于幼儿微生物发展的文档记载" />
+  
+
+<meta name="author" content="Fenghu Ji" />
+
+
+<meta name="date" content="2021-05-15" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="qiime2.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
+<li class="chapter" data-level="2" data-path="qiime2.html"><a href="qiime2.html"><i class="fa fa-check"></i><b>2</b> QIIME2分析流程</a><ul>
+<li class="chapter" data-level="2.1" data-path="qiime2.html"><a href="qiime2.html#双端测序数据的分析流程"><i class="fa fa-check"></i><b>2.1</b> 双端测序数据的分析流程</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="qiime2.html"><a href="qiime2.html#qiime2的安装"><i class="fa fa-check"></i><b>2.1.1</b> QIIME2的安装</a></li>
+<li class="chapter" data-level="2.1.2" data-path="qiime2.html"><a href="qiime2.html#qiime2的数据格式"><i class="fa fa-check"></i><b>2.1.2</b> QIIME2的数据格式</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="qiime2.html"><a href="qiime2.html#数据分析实例"><i class="fa fa-check"></i><b>2.2</b> 数据分析实例</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="qiime2.html"><a href="qiime2.html#数据下载"><i class="fa fa-check"></i><b>2.2.1</b> 数据下载</a></li>
+<li class="chapter" data-level="2.2.2" data-path="qiime2.html"><a href="qiime2.html#导入数据"><i class="fa fa-check"></i><b>2.2.2</b> 导入数据</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="RandomForest.html"><a href="RandomForest.html"><i class="fa fa-check"></i><b>3</b> 随机森林模型</a><ul>
+<li class="chapter" data-level="3.1" data-path="RandomForest.html"><a href="RandomForest.html#随机森林原理"><i class="fa fa-check"></i><b>3.1</b> 随机森林原理</a></li>
+<li class="chapter" data-level="3.2" data-path="RandomForest.html"><a href="RandomForest.html#随机森林变量importance"><i class="fa fa-check"></i><b>3.2</b> 随机森林变量importance</a></li>
+<li class="chapter" data-level="3.3" data-path="RandomForest.html"><a href="RandomForest.html#幼儿微生物随机森林回归"><i class="fa fa-check"></i><b>3.3</b> 幼儿微生物随机森林回归</a></li>
+<li class="chapter" data-level="3.4" data-path="RandomForest.html"><a href="RandomForest.html#数据预览"><i class="fa fa-check"></i><b>3.4</b> 数据预览</a></li>
+<li class="chapter" data-level="3.5" data-path="RandomForest.html"><a href="RandomForest.html#分析代码解析"><i class="fa fa-check"></i><b>3.5</b> 分析代码解析</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="RandomForest.html"><a href="RandomForest.html#查看importance-score"><i class="fa fa-check"></i><b>3.5.1</b> 查看importance score</a></li>
+<li class="chapter" data-level="3.5.2" data-path="RandomForest.html"><a href="RandomForest.html#获取最佳变量个数"><i class="fa fa-check"></i><b>3.5.2</b> 获取最佳变量个数</a></li>
+<li class="chapter" data-level="3.5.3" data-path="RandomForest.html"><a href="RandomForest.html#查看不同变量个数下的模型误差"><i class="fa fa-check"></i><b>3.5.3</b> 查看不同变量个数下的模型误差</a></li>
+<li class="chapter" data-level="3.5.4" data-path="RandomForest.html"><a href="RandomForest.html#查看结果"><i class="fa fa-check"></i><b>3.5.4</b> 查看结果</a></li>
+<li class="chapter" data-level="3.5.5" data-path="RandomForest.html"><a href="RandomForest.html#个变量的简约回归"><i class="fa fa-check"></i><b>3.5.5</b> 24个变量的简约回归</a></li>
+<li class="chapter" data-level="3.5.6" data-path="RandomForest.html"><a href="RandomForest.html#singleton预测结果"><i class="fa fa-check"></i><b>3.5.6</b> Singleton预测结果</a></li>
+<li class="chapter" data-level="3.5.7" data-path="RandomForest.html"><a href="RandomForest.html#twins-triplets预测结果"><i class="fa fa-check"></i><b>3.5.7</b> Twins &amp; Triplets预测结果</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">项目分析流程</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="RandomForest" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> 随机森林模型</h1>
+<div id="随机森林原理" class="section level2">
+<h2><span class="header-section-number">3.1</span> 随机森林原理</h2>
+<p>随机森林是集成学习中的Bagging（Bootstrap AGgregation）方法，其由多个决策树组成，当我们进行分类任务时，新的输入样本进入，就让森林中的每一棵决策树分别进行判断和分类，每个决策树会得到一个自己的分类结果，决策树的分类结果中哪一个分类最多，那么随机森林就会把这个结果当做最终的结果。关于随机森林的原理，可以参看<a href="https://zhuanlan.zhihu.com/p/57965634">博文</a>等。</p>
+<p>随机森林模型可以用于分类任务和回归任务中，下图展示了随机森林的基本回归原理：</p>
+<p>随机森林回归的预测结果是由内部所有二叉决策树的预测结果取平均值得到的。二叉决策树的预测过程主要分为以下步骤：</p>
+<ol style="list-style-type: decimal">
+<li>针对某一输入样本，从二叉决策树的根节点起，判断当前节点是否为叶子节点，如果是则返回叶子节点的预测值(即当前叶子中样本目标变量的平均值），如果不是则进入下一步<br />
+</li>
+<li>根据当前节点的切分变量的和切分值，将样本中对应变量的值与节点的切分值对比。如果样本变量值小于等于当前节点切分值，则访问当前节点的左子节点；如果样本变量值大于当前节点切分值，则访问当前节点的右子节点</li>
+<li>循环步骤2，直到访问到叶子节点，并返回叶子节点的预测</li>
+</ol>
+<p><img src="https://hugo-blog-1256988836.cos.ap-chengdu.myqcloud.com/16S/Micor-develop/doc_randomforest/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E5%9B%9E%E5%BD%92.png" /></p>
+</div>
+<div id="随机森林变量importance" class="section level2">
+<h2><span class="header-section-number">3.2</span> 随机森林变量importance</h2>
+<p>在随机森林模型中，每一个变量都有自己的importance score，这个importance score是该变量对于决策树预测的力度来决定的，在一个模型中，单个变量在树的最上侧，则该变量对于预测的影响程度越大，一般这种变量会大大减少预测结果的熵，对单个样本的预测具有十分重要的作用。</p>
+<p>在大部分的随机森林模型中，总是会先对变量进行重要性评估，然后再挑选出部分最重要的变量来作为最终的模型预测结果。这种思路我们会在之后的分析中展示。</p>
+</div>
+<div id="幼儿微生物随机森林回归" class="section level2">
+<h2><span class="header-section-number">3.3</span> 幼儿微生物随机森林回归</h2>
+<p>关于随机森林的源代码在<a href="https://github.com/FenghuJi/ProjectBackup/blob/main/randomForest.R">GitHub</a>上。</p>
+<p>我们的假设是，幼儿的肠道微生物组成能够代表幼儿的年龄。多种微生物作为变量，可以对最终的年龄进行回归。</p>
+<p>我们首先将ASV的丰度进行标准化，转换为相对丰度。文件放置于<a href="https://github.com/FenghuJi/ProjectBackup/blob/main/RandomForestFile/asv_realtive_abundance.txt">asv_realtive_abundance.txt</a>。其次是样本的<a href="https://github.com/FenghuJi/ProjectBackup/blob/main/RandomForestFile/healthy_metadata.txt">metadata</a>和每一个ASV对应的<a href="https://github.com/FenghuJi/ProjectBackup/blob/main/RandomForestFile/taxonomy.txt">物种分类信息</a>.</p>
+</div>
+<div id="数据预览" class="section level2">
+<h2><span class="header-section-number">3.4</span> 数据预览</h2>
+<p>原文：<strong>Persistent Gut Microbiota Immaturity in Malnourished Bangladeshi Children</strong><br />
+数据从<a href="https://www.ebi.ac.uk/ena/browser/view/PRJEB5482">ENA</a>中进行下载，数据号PRJEB5482,下载数据共2811个样本，其中部分数据采取不同的run测序，根据样本id将数据合并，一共得到1949个样本。</p>
+<p>其中健康婴儿的样本数目共996个，包含有Healthy Singleton Birth Cohort,Healthy Twins &amp; Triplets两类。在本文的分析中，首先使用12个孩子(包含272个16S样本)来训练随机森林模型，然后再分别在13个Singleton 孩子(276个16S样本)和25个Twins &amp; Triplets孩子（447）个样本中进行随机森林模型的验证计算。</p>
+<p>基本统计见下表：</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Accession Numer：PRJEB5482</th>
+<th align="left">数据类型</th>
+<th align="left">数据用途</th>
+<th align="left">Child Number</th>
+<th align="left">Sample Number</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Country：Bangladesh</td>
+<td align="left">Singleton</td>
+<td align="left">Training</td>
+<td align="left">12</td>
+<td align="left">272</td>
+</tr>
+<tr class="even">
+<td align="left">Child Type:Healthy</td>
+<td align="left">Singleton</td>
+<td align="left">Validation</td>
+<td align="left">13</td>
+<td align="left">276</td>
+</tr>
+<tr class="odd">
+<td align="left">Total Samples:996</td>
+<td align="left">Twins &amp; Triplets</td>
+<td align="left">Validation</td>
+<td align="left">25</td>
+<td align="left">448</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="分析代码解析" class="section level2">
+<h2><span class="header-section-number">3.5</span> 分析代码解析</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="RandomForest.html#cb13-1"></a><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>())</span>
+<span id="cb13-2"><a href="RandomForest.html#cb13-2"></a><span class="kw">library</span>(randomForest)</span>
+<span id="cb13-3"><a href="RandomForest.html#cb13-3"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb13-4"><a href="RandomForest.html#cb13-4"></a></span>
+<span id="cb13-5"><a href="RandomForest.html#cb13-5"></a><span class="co">#读入ASV丰度</span></span>
+<span id="cb13-6"><a href="RandomForest.html#cb13-6"></a>asv_abundance &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;asv_realtive_abundance.txt&quot;</span>,<span class="dt">header=</span>T,<span class="dt">sep=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</span>
+<span id="cb13-7"><a href="RandomForest.html#cb13-7"></a></span>
+<span id="cb13-8"><a href="RandomForest.html#cb13-8"></a><span class="co">## 过滤ASV</span></span>
+<span id="cb13-9"><a href="RandomForest.html#cb13-9"></a></span>
+<span id="cb13-10"><a href="RandomForest.html#cb13-10"></a><span class="co">## 创建函数来计算符合相对丰度&gt;0.1%的ASV个数</span></span>
+<span id="cb13-11"><a href="RandomForest.html#cb13-11"></a>count &lt;-<span class="st"> </span><span class="cf">function</span>(abun){</span>
+<span id="cb13-12"><a href="RandomForest.html#cb13-12"></a>    num &lt;-<span class="st"> </span><span class="kw">sum</span>(abun<span class="op">&gt;</span><span class="fl">0.1</span>)</span>
+<span id="cb13-13"><a href="RandomForest.html#cb13-13"></a>    <span class="kw">return</span>(num)</span>
+<span id="cb13-14"><a href="RandomForest.html#cb13-14"></a>}</span>
+<span id="cb13-15"><a href="RandomForest.html#cb13-15"></a></span>
+<span id="cb13-16"><a href="RandomForest.html#cb13-16"></a>filter_count &lt;-<span class="st"> </span><span class="kw">apply</span>(asv_abundance,<span class="dv">1</span>,count)</span>
+<span id="cb13-17"><a href="RandomForest.html#cb13-17"></a>index &lt;-<span class="st"> </span><span class="kw">which</span>(filter_count<span class="op">&gt;</span><span class="dv">2</span>)  <span class="co"># 获取符合条件的ASV索引</span></span>
+<span id="cb13-18"><a href="RandomForest.html#cb13-18"></a>filter_abundance &lt;-<span class="st"> </span>asv_abundance[index,]</span>
+<span id="cb13-19"><a href="RandomForest.html#cb13-19"></a></span>
+<span id="cb13-20"><a href="RandomForest.html#cb13-20"></a><span class="co">## 读入metadata数据并合并数据</span></span>
+<span id="cb13-21"><a href="RandomForest.html#cb13-21"></a>metadata &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;healthy_metadata.txt&quot;</span>,<span class="dt">header=</span>T,<span class="dt">sep=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>,<span class="dt">row.names=</span><span class="dv">1</span>)</span>
+<span id="cb13-22"><a href="RandomForest.html#cb13-22"></a>otu &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">t</span>(filter_abundance))</span>
+<span id="cb13-23"><a href="RandomForest.html#cb13-23"></a>otu<span class="op">$</span>age_day &lt;-<span class="st"> </span>metadata[<span class="kw">rownames</span>(otu),]<span class="op">$</span>age_day</span>
+<span id="cb13-24"><a href="RandomForest.html#cb13-24"></a></span>
+<span id="cb13-25"><a href="RandomForest.html#cb13-25"></a><span class="co"># 训练集和测试集</span></span>
+<span id="cb13-26"><a href="RandomForest.html#cb13-26"></a>train_sample &lt;-<span class="st"> </span>otu[<span class="kw">rownames</span>(metadata)[<span class="kw">which</span>(metadata<span class="op">$</span>Type<span class="op">==</span><span class="st">&quot;Training&quot;</span>)],]</span>
+<span id="cb13-27"><a href="RandomForest.html#cb13-27"></a>valid_sample &lt;-<span class="st"> </span>otu[<span class="kw">rownames</span>(metadata)[<span class="kw">which</span>(metadata<span class="op">$</span>Type<span class="op">==</span><span class="st">&quot;Validation&quot;</span>)],]</span>
+<span id="cb13-28"><a href="RandomForest.html#cb13-28"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)  <span class="co"># 创建随机种子，从而使得结果可重复</span></span>
+<span id="cb13-29"><a href="RandomForest.html#cb13-29"></a>otu_train.forest &lt;-<span class="st"> </span><span class="kw">randomForest</span>(age_day<span class="op">~</span>., <span class="dt">data =</span> train_sample, <span class="dt">importance =</span> <span class="ot">TRUE</span>) <span class="co">## 开始训练</span></span></code></pre></div>
+<p>当前的模型是以所有的ASV作为预测变量，我们查看一下当前的性能。</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="RandomForest.html#cb14-1"></a>otu_train.forest</span></code></pre></div>
+<pre><code>## 
+## Call:
+##  randomForest(formula = age_day ~ ., data = train_sample, importance = TRUE) 
+##                Type of random forest: regression
+##                      Number of trees: 500
+## No. of variables tried at each split: 201
+## 
+##           Mean of squared residuals: 16052.08
+##                     % Var explained: 64.26</code></pre>
+<p>使用605个ASVs作为特征输入，对文中的<strong>chronologic age</strong>进行回归，chronologic age使用的数据为婴儿的<strong>出生天数</strong>。
+结果显示，使用所有的ASV作为输入的时候能够解释64.26%的variance，而原文为73%。考虑到实际只有部分ASV可以作为变量解释，过多的变量会影响模型，我们从上述训练模型获取每个变量的importance score.</p>
+<div id="查看importance-score" class="section level3">
+<h3><span class="header-section-number">3.5.1</span> 查看importance score</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="RandomForest.html#cb16-1"></a>importance_otu &lt;-<span class="st"> </span><span class="kw">data.frame</span>(otu_train.forest<span class="op">$</span>importance)</span>
+<span id="cb16-2"><a href="RandomForest.html#cb16-2"></a><span class="co"># 下面的绘图代码结果见下图</span></span>
+<span id="cb16-3"><a href="RandomForest.html#cb16-3"></a><span class="co">#varImpPlot(otu_train.forest, n.var = min(30, nrow(otu_train.forest$importance)),</span></span>
+<span id="cb16-4"><a href="RandomForest.html#cb16-4"></a><span class="co">#main = &#39;Top 30 - variable importance&#39;)</span></span></code></pre></div>
+<p><img src="https://hugo-blog-1256988836.cos.ap-chengdu.myqcloud.com/16S/top30_importance_score.png" /></p>
+</div>
+<div id="获取最佳变量个数" class="section level3">
+<h3><span class="header-section-number">3.5.2</span> 获取最佳变量个数</h3>
+<p>这里有两个变量：<br />
+<strong>%IncMSE</strong>：increase in mean squared error，通过对每一个预测变量随机赋值，如果该预测变量更为重要，那么其值被随机替换后模型预测的误差会增大。因此，该值越大表示该变量的重要性越大
+<strong>IncNodePurity</strong>：increase in node purity，通过残差平方和来度量，代表了每个变量对分类树每个节点上观测值的异质性的影响，从而比较变量的重要性。该值越大表示该变量的重要性越大。</p>
+<p>我们使用<strong>IncNodePurity</strong>来衡量importance score，并通过十折交叉验证筛选变量.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="RandomForest.html#cb17-1"></a>importance_otu &lt;-<span class="st"> </span>importance_otu[<span class="kw">order</span>(importance_otu<span class="op">$</span>IncNodePurity, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>), ]</span>
+<span id="cb17-2"><a href="RandomForest.html#cb17-2"></a><span class="co">#write.table(importance_otu, &#39;importance_otu.txt&#39;, sep = &#39;\t&#39;, col.names = NA, quote = FALSE)</span></span></code></pre></div>
+</div>
+<div id="查看不同变量个数下的模型误差" class="section level3">
+<h3><span class="header-section-number">3.5.3</span> 查看不同变量个数下的模型误差</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="RandomForest.html#cb18-1"></a>otu_train &lt;-<span class="st"> </span>train_sample</span>
+<span id="cb18-2"><a href="RandomForest.html#cb18-2"></a></span>
+<span id="cb18-3"><a href="RandomForest.html#cb18-3"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb18-4"><a href="RandomForest.html#cb18-4"></a>otu_train.cv &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">10</span>, <span class="kw">rfcv</span>(otu_train[<span class="op">-</span><span class="kw">ncol</span>(otu_train)], otu_train<span class="op">$</span>age_day, <span class="dt">cv.fold =</span> <span class="dv">10</span>, <span class="dt">step =</span> <span class="fl">1.5</span>), <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb18-5"><a href="RandomForest.html#cb18-5"></a>otu_train.cv</span>
+<span id="cb18-6"><a href="RandomForest.html#cb18-6"></a>otu_train.cv &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">sapply</span>(otu_train.cv, <span class="st">&#39;[[&#39;</span>, <span class="st">&#39;error.cv&#39;</span>))</span>
+<span id="cb18-7"><a href="RandomForest.html#cb18-7"></a>otu_train.cv<span class="op">$</span>otus &lt;-<span class="st"> </span><span class="kw">rownames</span>(otu_train.cv)</span>
+<span id="cb18-8"><a href="RandomForest.html#cb18-8"></a>otu_train.cv &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw">melt</span>(otu_train.cv, <span class="dt">id =</span> <span class="st">&#39;otus&#39;</span>)</span>
+<span id="cb18-9"><a href="RandomForest.html#cb18-9"></a>otu_train.cv<span class="op">$</span>otus &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>(otu_train.cv<span class="op">$</span>otus))</span>
+<span id="cb18-10"><a href="RandomForest.html#cb18-10"></a> </span>
+<span id="cb18-11"><a href="RandomForest.html#cb18-11"></a>otu_train.cv.mean &lt;-<span class="st"> </span><span class="kw">aggregate</span>(otu_train.cv<span class="op">$</span>value, <span class="dt">by =</span> <span class="kw">list</span>(otu_train.cv<span class="op">$</span>otus), <span class="dt">FUN =</span> mean)</span></code></pre></div>
+</div>
+<div id="查看结果" class="section level3">
+<h3><span class="header-section-number">3.5.4</span> 查看结果</h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="RandomForest.html#cb19-1"></a><span class="co">#head(otu_train.cv.mean, 10)</span></span>
+<span id="cb19-2"><a href="RandomForest.html#cb19-2"></a></span>
+<span id="cb19-3"><a href="RandomForest.html#cb19-3"></a><span class="co">#拟合线图</span></span>
+<span id="cb19-4"><a href="RandomForest.html#cb19-4"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb19-5"><a href="RandomForest.html#cb19-5"></a> </span>
+<span id="cb19-6"><a href="RandomForest.html#cb19-6"></a><span class="kw">ggplot</span>(otu_train.cv.mean, <span class="kw">aes</span>(Group<span class="fl">.1</span>, x)) <span class="op">+</span></span>
+<span id="cb19-7"><a href="RandomForest.html#cb19-7"></a><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb19-8"><a href="RandomForest.html#cb19-8"></a><span class="kw">theme</span>(<span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&#39;black&#39;</span>, <span class="dt">fill =</span> <span class="st">&#39;transparent&#39;</span>)) <span class="op">+</span></span>
+<span id="cb19-9"><a href="RandomForest.html#cb19-9"></a><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&#39;&#39;</span>,<span class="dt">x =</span> <span class="st">&#39;Number of OTUs&#39;</span>, <span class="dt">y =</span> <span class="st">&#39;Cross-validation error&#39;</span>)</span></code></pre></div>
+<p>十折交叉验证的结果表明，当变量数在16-24时，模型误差开始减慢减少速度，在24-35的时候基本减少的误差很小甚至开始增加。所以我们可以认为，该模型筛选的变量数目和原文比较一致，在ASV变量数目为24时，达到了最好的回归效果。所以只需要保留Top24 importance score的ASVs作为预测变量即可。</p>
+</div>
+<div id="个变量的简约回归" class="section level3">
+<h3><span class="header-section-number">3.5.5</span> 24个变量的简约回归</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="RandomForest.html#cb20-1"></a>importance_otu.select &lt;-<span class="st"> </span>importance_otu[<span class="dv">1</span><span class="op">:</span><span class="dv">24</span>, ]</span>
+<span id="cb20-2"><a href="RandomForest.html#cb20-2"></a>otu_id.select &lt;-<span class="st"> </span><span class="kw">rownames</span>(importance_otu.select)</span>
+<span id="cb20-3"><a href="RandomForest.html#cb20-3"></a><span class="co">#write.table(importance_otu.select, &#39;importance_otu.select.txt&#39;, sep = &#39;\t&#39;, col.names = NA, quote = FALSE)</span></span>
+<span id="cb20-4"><a href="RandomForest.html#cb20-4"></a><span class="co">##只包含 24 个重要预测变量的简约回归</span></span>
+<span id="cb20-5"><a href="RandomForest.html#cb20-5"></a>otu_train.select &lt;-<span class="st"> </span>train_sample[,<span class="kw">c</span>(otu_id.select,<span class="st">&quot;age_day&quot;</span>)]</span>
+<span id="cb20-6"><a href="RandomForest.html#cb20-6"></a>otu_test.select &lt;-<span class="st"> </span>valid_sample[,<span class="kw">c</span>(otu_id.select,<span class="st">&quot;age_day&quot;</span>)]</span>
+<span id="cb20-7"><a href="RandomForest.html#cb20-7"></a></span>
+<span id="cb20-8"><a href="RandomForest.html#cb20-8"></a><span class="co">#随机森林计算（默认生成 500 棵决策树），详情 ?randomForest</span></span>
+<span id="cb20-9"><a href="RandomForest.html#cb20-9"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb20-10"><a href="RandomForest.html#cb20-10"></a>otu_train.select.forest &lt;-<span class="st"> </span><span class="kw">randomForest</span>(age_day<span class="op">~</span>., <span class="dt">data =</span> otu_train.select, <span class="dt">importance =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p>查看这24个变量的回归性能：</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="RandomForest.html#cb21-1"></a>otu_train.select.forest</span></code></pre></div>
+<pre><code>## 
+## Call:
+##  randomForest(formula = age_day ~ ., data = otu_train.select,      importance = TRUE) 
+##                Type of random forest: regression
+##                      Number of trees: 500
+## No. of variables tried at each split: 8
+## 
+##           Mean of squared residuals: 15775.65
+##                     % Var explained: 64.88</code></pre>
+<p>上述结果表明，当预测变量数目为24时，达到了比所有ASVs作为预测变量更好的变量解释程度：64.88</p>
+<p>接下来我们使用测试集数目进行评分，测试集数目分为Singleton和Twins &amp; Triplets数据.</p>
+</div>
+<div id="singleton预测结果" class="section level3">
+<h3><span class="header-section-number">3.5.6</span> Singleton预测结果</h3>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="RandomForest.html#cb23-1"></a>names &lt;-<span class="st"> </span><span class="kw">rownames</span>(otu_test.select)</span>
+<span id="cb23-2"><a href="RandomForest.html#cb23-2"></a>single_test &lt;-<span class="st"> </span>otu_test.select[<span class="kw">which</span>(<span class="kw">grepl</span>(names,<span class="dt">pattern=</span><span class="st">&quot;Bgs&quot;</span>)<span class="op">==</span><span class="ot">TRUE</span>),]</span>
+<span id="cb23-3"><a href="RandomForest.html#cb23-3"></a>twin_test &lt;-<span class="st"> </span>otu_test.select[<span class="kw">which</span>(<span class="kw">grepl</span>(names,<span class="dt">pattern=</span><span class="st">&quot;Bgt&quot;</span>)<span class="op">==</span><span class="ot">TRUE</span>),]</span>
+<span id="cb23-4"><a href="RandomForest.html#cb23-4"></a></span>
+<span id="cb23-5"><a href="RandomForest.html#cb23-5"></a>age_predict_single &lt;-<span class="st"> </span><span class="kw">predict</span>(otu_train.select.forest, single_test)</span>
+<span id="cb23-6"><a href="RandomForest.html#cb23-6"></a> </span>
+<span id="cb23-7"><a href="RandomForest.html#cb23-7"></a><span class="kw">plot</span>(single_test<span class="op">$</span>age_day, age_predict_single, <span class="dt">main =</span> <span class="st">&#39;Single_Birth_Cohort_Test&#39;</span>,<span class="dt">xlab =</span> <span class="st">&#39;age (days)&#39;</span>, <span class="dt">ylab =</span> <span class="st">&#39;Predict&#39;</span>)</span>
+<span id="cb23-8"><a href="RandomForest.html#cb23-8"></a><span class="kw">abline</span>(<span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="Micorbiota_Development_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="RandomForest.html#cb24-1"></a>Single_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(single_test<span class="op">$</span>age_day, age_predict_single)</span>
+<span id="cb24-2"><a href="RandomForest.html#cb24-2"></a>Single_Fit &lt;-<span class="st"> </span><span class="kw">lm</span>(age_predict_single<span class="op">~</span>single_test.age_day,<span class="dt">data=</span>Single_data)</span>
+<span id="cb24-3"><a href="RandomForest.html#cb24-3"></a><span class="kw">summary</span>(Single_Fit)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = age_predict_single ~ single_test.age_day, data = Single_data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -340.61  -66.55   -1.79   64.17  308.49 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         115.47437   11.21453   10.30   &lt;2e-16 ***
+## single_test.age_day   0.71214    0.02805   25.39   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 97.4 on 274 degrees of freedom
+## Multiple R-squared:  0.7017, Adjusted R-squared:  0.7006 
+## F-statistic: 644.5 on 1 and 274 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div id="twins-triplets预测结果" class="section level3">
+<h3><span class="header-section-number">3.5.7</span> Twins &amp; Triplets预测结果</h3>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="RandomForest.html#cb26-1"></a>age_predict_twin &lt;-<span class="st"> </span><span class="kw">predict</span>(otu_train.select.forest, twin_test)</span>
+<span id="cb26-2"><a href="RandomForest.html#cb26-2"></a><span class="kw">plot</span>(twin_test<span class="op">$</span>age_day, age_predict_twin, <span class="dt">main =</span> <span class="st">&#39;Twin_Birth_Cohort_Test&#39;</span>,<span class="dt">xlab =</span> <span class="st">&#39;age (days)&#39;</span>, <span class="dt">ylab =</span> <span class="st">&#39;Predict&#39;</span>)</span>
+<span id="cb26-3"><a href="RandomForest.html#cb26-3"></a><span class="kw">abline</span>(<span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="Micorbiota_Development_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="RandomForest.html#cb27-1"></a>Twin_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(twin_test<span class="op">$</span>age_day, age_predict_twin)</span>
+<span id="cb27-2"><a href="RandomForest.html#cb27-2"></a>Twin_Fit &lt;-<span class="st"> </span><span class="kw">lm</span>(age_predict_twin<span class="op">~</span>twin_test.age_day,<span class="dt">data=</span>Twin_data)</span>
+<span id="cb27-3"><a href="RandomForest.html#cb27-3"></a><span class="kw">summary</span>(Twin_Fit)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = age_predict_twin ~ twin_test.age_day, data = Twin_data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -326.82  -69.89   -7.75   63.92  277.00 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       138.48008    8.50261   16.29   &lt;2e-16 ***
+## twin_test.age_day   0.74909    0.02631   28.47   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 100.3 on 446 degrees of freedom
+## Multiple R-squared:  0.645,  Adjusted R-squared:  0.6442 
+## F-statistic: 810.4 on 1 and 446 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>上述结果表明：<br />
+在Singleton和Twins &amp; Triplets的预测结果和原始的结果拟合，拟合R^2分别为0.7006和0.6442</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Taxa Number</th>
+<th align="left">变量解释</th>
+<th align="left">测试集Singleton拟合R^2</th>
+<th align="left">测试集多胞胎拟合R^2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">原文</td>
+<td align="left">24</td>
+<td align="left">unknown</td>
+<td align="left">0.71</td>
+<td align="left">0.68</td>
+</tr>
+<tr class="even">
+<td align="left">复现</td>
+<td align="left">24</td>
+<td align="left">64.88</td>
+<td align="left">0.7006</td>
+<td align="left">0.6442</td>
+</tr>
+</tbody>
+</table>
+<p>看一下这个OTU是什么：</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="RandomForest.html#cb29-1"></a><span class="co"># write.table(importance_otu.select,&quot;Selected_OTUs.txt&quot;,sep=&quot;\t&quot;,quote=F)</span></span>
+<span id="cb29-2"><a href="RandomForest.html#cb29-2"></a><span class="co"># 需要对importance_otu.select表格中的&quot;X&quot;替换掉</span></span>
+<span id="cb29-3"><a href="RandomForest.html#cb29-3"></a>taxa &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;taxonomy.txt&quot;</span>,<span class="dt">sep=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>,<span class="dt">header=</span>T)</span>
+<span id="cb29-4"><a href="RandomForest.html#cb29-4"></a>ASV &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;Selected_OTUs.txt&quot;</span>,<span class="dt">header=</span>T,<span class="dt">sep=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</span>
+<span id="cb29-5"><a href="RandomForest.html#cb29-5"></a>ASV_infomation &lt;-<span class="st"> </span><span class="kw">inner_join</span>(taxa,ASV,<span class="dt">by=</span><span class="st">&quot;ASV&quot;</span>)</span>
+<span id="cb29-6"><a href="RandomForest.html#cb29-6"></a>show_info &lt;-<span class="st"> </span>ASV_infomation[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)]</span>
+<span id="cb29-7"><a href="RandomForest.html#cb29-7"></a></span>
+<span id="cb29-8"><a href="RandomForest.html#cb29-8"></a>show_info[,<span class="dv">2</span>]</span></code></pre></div>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="qiime2.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Micorbiota_Development.pdf", "Micorbiota_Development.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
